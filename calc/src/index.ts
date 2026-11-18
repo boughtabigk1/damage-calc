@@ -29,6 +29,7 @@
 //   - calc.js
 //   - desc.js
 //   - result.js
+//   - turns.js
 //
 //   - adaptable.js
 //   - index.js
@@ -47,6 +48,8 @@ import {Generations} from './data';
 import type {State} from './state';
 import type * as I from './data/interface';
 import * as A from './adaptable';
+import {getKOChanceByTurn, type KOChanceByTurnOptions} from './turns';
+import {getFinalSpeed} from './mechanics/util';
 
 // The loading strategy outlined in the comment above breaks in the browser when we start reusing
 // names as we're doing here with our shim overrides. Because exporting calculate below tramples
@@ -140,6 +143,37 @@ export function calcStat(
   );
 }
 
+/**
+ * Probability of a KO by each turn, with end-of-turn effects, entry hazards and
+ * field effects that run out. See `getKOChanceByTurn` in turns.ts.
+ */
+export function koChanceByTurn(
+  gen: I.GenerationNum | I.Generation,
+  attacker: A.Pokemon,
+  defender: A.Pokemon,
+  move: A.Move,
+  field: A.Field,
+  options?: KOChanceByTurnOptions
+) {
+  return getKOChanceByTurn(
+    typeof gen === 'number' ? Generations.get(gen) : gen, attacker, defender, move, field, options
+  );
+}
+
+/**
+ * Effective Speed with boosts, items, abilities, weather, paralysis and Tailwind.
+ * Trick Room is not applied.
+ */
+export function calcFinalSpeed(
+  gen: I.GenerationNum | I.Generation,
+  pokemon: A.Pokemon,
+  field: A.Field,
+  side: A.Side
+) {
+  return getFinalSpeed(typeof gen === 'number' ? Generations.get(gen) : gen, pokemon, field, side);
+}
+
+export type {KOChanceByTurn, KOChanceByTurnOptions, TimedFieldEffect, TimedSideFlag} from './turns';
 export {Field, Side} from './field';
 export {Result} from './result';
 export {type GenerationNum, type StatsTable, type StatID} from './data/interface';

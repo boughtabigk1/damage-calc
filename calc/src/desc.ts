@@ -453,7 +453,7 @@ export function getKOChance(
   return {chance: 0, n: 0, text: ''};
 }
 
-function combine(damage: Damage): [number[], boolean] {
+export function combine(damage: Damage): [number[], boolean] {
   // Fixed Damage
   if (typeof damage === 'number') return [[damage], false];
 
@@ -513,7 +513,7 @@ const TRAPPING = [
   'Thunder Cage', 'Whirlpool', 'Wrap', 'G-Max Sandblast', 'G-Max Centiferno',
 ];
 
-function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
+export function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
   let damage = 0;
   const texts: string[] = [];
 
@@ -568,7 +568,7 @@ function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
   return {damage, texts};
 }
 
-function getEndOfTurn(
+export function getEndOfTurn(
   gen: Generation,
   attacker: Pokemon,
   defender: Pokemon,
